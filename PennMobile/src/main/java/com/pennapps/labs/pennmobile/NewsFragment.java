@@ -132,6 +132,9 @@ public class NewsFragment extends Fragment {
         super.onResume();
         getActivity().setTitle(R.string.news);
         ((MainActivity) getActivity()).setNav(R.id.nav_news);
+        setHasOptionsMenu(true);
+        pageAdapter = new TabAdapter(getActivity().getSupportFragmentManager());
+        ((MainActivity) getActivity()).addTabs(pageAdapter, pager, true);
     }
 
     @Override

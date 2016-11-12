@@ -19,6 +19,8 @@ public class NewsTab extends Fragment {
 
     private String mUrl = "http://www.thedp.com/";
     static WebView currentWebView;
+    private boolean mIsWebViewAvailable;
+    boolean isVisibleToUser = false;
     @Bind(R.id.webview) WebView mWebView;
     private boolean newsLoaded;
 
@@ -50,7 +52,7 @@ public class NewsTab extends Fragment {
     }
 
     public void loadNews() {
-//        mIsWebViewAvailable = true;
+        mIsWebViewAvailable = true;
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int progress)
@@ -86,6 +88,12 @@ public class NewsTab extends Fragment {
     public void onResume() {
         mWebView.onResume();
         getActivity().setTitle(R.string.news);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.setBackgroundColor(Color.argb(1, 0, 0, 0));
+        if (!newsLoaded) {
+            loadNews();
+            newsLoaded = true;
+        }
         super.onResume();
     }
 
@@ -96,17 +104,18 @@ public class NewsTab extends Fragment {
         if (isVisible) {
             currentWebView = mWebView;
         }
+        this.isVisibleToUser = isVisible;
     }
 
     /**
      * Called when the WebView has been detached from the fragment.
      * The WebView is no longer available after this time.
      */
-//    @Override
-//    public void onDestroyView() {
-//        mIsWebViewAvailable = false;
-//        super.onDestroyView();
-//    }
+    @Override
+    public void onDestroyView() {
+        mIsWebViewAvailable = false;
+        super.onDestroyView();
+    }
 
     /**
      * Called when the fragment is no longer in use. Destroys the internal state of the WebView.
@@ -123,7 +132,7 @@ public class NewsTab extends Fragment {
     /**
      * Gets the WebView.
      */
-//    public WebView getWebView() {
-//        return mIsWebViewAvailable ? mWebView : null;
-//    }
+    public WebView getWebView() {
+        return mIsWebViewAvailable ? mWebView : null;
+    }
 }
